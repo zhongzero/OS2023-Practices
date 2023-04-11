@@ -1,0 +1,13 @@
+{
+	"files.associations": {
+		"unistd.h": "c",
+		"coroutine.h": "c",
+		"array": "c",
+		"*.tcc": "c",
+		"memory": "c",
+		"istream": "c",
+		"functional": "c",
+		"tuple": "c",
+		"utility": "c"
+	}
+}
