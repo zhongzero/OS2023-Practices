@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #include "mm.h"
 #include "memlib.h"
@@ -88,14 +89,23 @@ static void *extend_heap(size_t size){
 	// printf("make %lx %lx\n",p+4,p+8+newsize);
 	return p+8;
 }
+static void SPLIT(void *p,unsigned int size1){
+	int size2=GET_SIZE(HEAD(p))-size1-8;
+	PUT(p+size1+4,size2|0);
+	PUT(TAIL(p),size2|0);
+	PUT(HEAD(p),size1|1);
+	PUT(p+size1,size1|1);
+}
+
 void *malloc(size_t size){
 	if(size==0)return NULL;
 	// printf("%lx %lx %lx %lx\n",mem_heap_lo(),mem_heap_hi(),mem_heapsize(),mem_sbrk(0));
-	unsigned long long *currentp=mem_heap_lo()+8;
+	void *currentp=mem_heap_lo()+8;
 	while(currentp<=mem_heap_hi()){
 		// printf("currentp: %lx\n",currentp);
-		if(!GET_ALLOC(HEAD(currentp)) && GET_SIZE(HEAD(currentp))>=size){
+		if(!GET_ALLOC(HEAD(currentp)) && GET_SIZE(HEAD(currentp))>=ALIGN(size)){
 			// printf("check %lx %lx\n",HEAD(currentp),TAIL(currentp));
+			if(GET_SIZE(HEAD(currentp))>ALIGN(size)+8)SPLIT(currentp,ALIGN(size));
 			PUT(HEAD(currentp),GET_SIZE(HEAD(currentp))|1);
 			PUT(TAIL(currentp),GET_SIZE(TAIL(currentp))|1);
 			// printf("!!! malloc %d: %lx\n",size,currentp);
@@ -106,6 +116,14 @@ void *malloc(size_t size){
 	return extend_heap(size);
 }
 
+static bool try_merge(void *ptr1,void *ptr2){
+	// printf("%lx %lx\n",ptr1,ptr2);
+	if(GET_ALLOC(HEAD(ptr1)) || GET_ALLOC(HEAD(ptr2)) ) return 0;
+	unsigned int totsize=GET_SIZE(HEAD(ptr1))+GET_SIZE(HEAD(ptr2))+8;
+	PUT(HEAD(ptr1),totsize|0);
+	PUT(TAIL(ptr2),totsize|0);
+	return 1;
+}
 /*
  * free - We don't know how to free a block.	So we ignore this call.
  *			Computers have big memories; surely it won't be a problem.
@@ -116,6 +134,13 @@ void free(void *ptr){
 	// printf("free %lx\n",ptr);
 	PUT(HEAD(ptr),GET_SIZE(HEAD(ptr))|0);
 	PUT(TAIL(ptr),GET_SIZE(TAIL(ptr))|0);
+	if(ptr!=mem_heap_lo()+8){
+		void *ptr_pre=PRE_P(ptr);
+		if(try_merge(ptr_pre,ptr))ptr=ptr_pre;
+	}
+	if(NEXT_P(ptr)<=mem_heap_hi()){
+		try_merge(ptr,NEXT_P(ptr));
+	}
 }
 
 /*
