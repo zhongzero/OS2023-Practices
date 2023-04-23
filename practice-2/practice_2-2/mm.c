@@ -128,18 +128,34 @@ void *malloc(size_t size){
 	if(size==0)return NULL;
 	// printf("%llx %llx %llx %llx\n",mem_heap_lo(),mem_heap_hi(),mem_heapsize(),mem_sbrk(0));
 	void *currentp=NEXT_LIST_P(LIST_BEGIN);
+	// while(currentp!=LIST_END){
+	// 	// printf("currentp: %llx\n",currentp);
+	// 	if(GET_SIZE(HEAD(currentp))>=ALIGN(size)){
+	// 		// printf("check %llx %llx\n",HEAD(currentp),TAIL(currentp));
+	// 		if(GET_SIZE(HEAD(currentp))>ALIGN(size)+8)SPLIT(currentp,ALIGN(size));
+	// 		PUT(HEAD(currentp),GET_SIZE(HEAD(currentp))|1);
+	// 		PUT(TAIL(currentp),GET_SIZE(TAIL(currentp))|1);
+	// 		DeleteFromExplicitList(currentp);
+	// 		// printf("!!! malloc %d: %llx\n",size,currentp);
+	// 		return currentp;
+	// 	}
+	// 	currentp=NEXT_LIST_P(currentp);
+	// }
+	void *bestP=NULL;
 	while(currentp!=LIST_END){
 		// printf("currentp: %llx\n",currentp);
 		if(!GET_ALLOC(HEAD(currentp)) && GET_SIZE(HEAD(currentp))>=ALIGN(size)){
-			// printf("check %llx %llx\n",HEAD(currentp),TAIL(currentp));
-			if(GET_SIZE(HEAD(currentp))>ALIGN(size)+8)SPLIT(currentp,ALIGN(size));
-			PUT(HEAD(currentp),GET_SIZE(HEAD(currentp))|1);
-			PUT(TAIL(currentp),GET_SIZE(TAIL(currentp))|1);
-			DeleteFromExplicitList(currentp);
-			// printf("!!! malloc %d: %llx\n",size,currentp);
-			return currentp;
+			if(bestP==NULL || GET_SIZE(HEAD(currentp))<GET_SIZE(HEAD(bestP)))bestP=currentp;
 		}
 		currentp=NEXT_LIST_P(currentp);
+	}
+	if(bestP!=NULL){
+		if(GET_SIZE(HEAD(bestP))>ALIGN(size)+8)SPLIT(bestP,ALIGN(size));
+		PUT(HEAD(bestP),GET_SIZE(HEAD(bestP))|1);
+		PUT(TAIL(bestP),GET_SIZE(TAIL(bestP))|1);
+		DeleteFromExplicitList(bestP);
+		// printf("!!! malloc %d: %llx\n",size,bestP);
+		return bestP;
 	}
 	return extend_heap(size);
 }
