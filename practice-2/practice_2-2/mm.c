@@ -68,10 +68,10 @@
 #define NEXT_LIST_P(p) (mem_heap_lo()+GET(p))
 #define PRE_LIST_P(p) (mem_heap_lo()+GET((char*)(p)+4))
 
-#define INIT_SIZE 16
+#define INIT_SIZE 8
 
 #define LIST_BEGIN mem_heap_lo()
-#define LIST_END mem_heap_lo()+8
+#define LIST_END mem_heap_lo()
 
 /*
  * mm_init - Called when a new trace starts.
