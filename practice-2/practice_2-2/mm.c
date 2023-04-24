@@ -60,11 +60,16 @@
 /*是否使用segregated lists*/
 #define SEGREGATE
 /*下面三选一*/
-// #define FIRST_FIT__AND_INSERT_HEAD
-#define FIRST_FIT__AND_INSERT_TAIL
+#define FIRST_FIT__AND_INSERT_HEAD
+// #define FIRST_FIT__AND_INSERT_TAIL
 // #define BEST_FIT
 
+#ifdef SEGREGATE
+#define MAXCHECKLISTNUM 3//设当前寻找的块大小在list(x),则表示最多检查到list(x+MAXCHECKLISTNUM) (开成11表示全部检查)
+#endif
+
 #define max(a,b) ((a)>(b)?(a):(b))
+#define min(a,b) ((a)<(b)?(a):(b))
 
 #define GET(p) (*(unsigned int*)(p))
 #define PUT(p,val) (*(unsigned int*)(p)=(val))
@@ -224,7 +229,8 @@ void *malloc(size_t size){
 	#ifdef FIRST_FIT__AND_INSERT_HEAD
 	{//first fit;等价于insert new free block into head
 		int id=GetListId(ALIGN(size));
-		while(id<=11){
+		int lid=min(id+MAXCHECKLISTNUM,11);
+		while(id<=lid){
 			void *currentp=NEXT_LIST_P2(LIST_BEGIN2(id));
 			while(currentp!=LIST_END2(id)){
 				// printf("currentp: %llx\n",currentp);
@@ -248,7 +254,8 @@ void *malloc(size_t size){
 	#ifdef FIRST_FIT__AND_INSERT_TAIL
 	{//first fit;等价于insert new free block into tail
 		int id=GetListId(ALIGN(size));
-		while(id<=11){
+		int lid=min(id+MAXCHECKLISTNUM,11);
+		while(id<=lid){
 			// printf("size=%u,id=%d\n",size,id);
 			void *currentp=PRE_LIST_P2(LIST_END2(id));
 			while(currentp!=LIST_BEGIN2(id)){
@@ -273,7 +280,8 @@ void *malloc(size_t size){
 	#ifdef BEST_FIT
 	{//best fit
 		int id=GetListId(ALIGN(size));
-		while(id<=11){
+		int lid=min(id+MAXCHECKLISTNUM,11);
+		while(id<=lid){
 			void *currentp=NEXT_LIST_P2(LIST_BEGIN2(id));
 			void *bestP=NULL;
 			while(currentp!=LIST_END2(id)){
