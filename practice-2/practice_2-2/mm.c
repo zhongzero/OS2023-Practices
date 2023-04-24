@@ -68,50 +68,132 @@
 #define NEXT_LIST_P(p) (mem_heap_lo()+GET(p))
 #define PRE_LIST_P(p) (mem_heap_lo()+GET((char*)(p)+4))
 
-#define INIT_SIZE 8
 
+#define SEGREGATE
+
+
+#ifdef SEGREGATE
+#define INIT_SIZE (8*30)
+#define LIST_BEGIN(p) (mem_heap_lo()+((p)-2)*8)
+#define LIST_END(p) (mem_heap_lo()+((p)-2)*8)
+#else
+#define INIT_SIZE 8
 #define LIST_BEGIN mem_heap_lo()
 #define LIST_END mem_heap_lo()
+#endif
+
+
+/*
+[2^2,2^3),[2^3,2^4),...,[2^31,2^32)
+[2^p,2^(p+1))    (2<=p<=31)
+*/
 
 /*
  * mm_init - Called when a new trace starts.
  */
+#ifdef SEGREGATE
 int mm_init(void){
 	// printf("\ninit %llx %llx %llx %llx\n",mem_heap_lo(),mem_heap_hi(),mem_heapsize(),mem_sbrk(0));
 	mem_sbrk(INIT_SIZE);//p=mem_heap_lo()
-	PUT(LIST_BEGIN,LIST_END-mem_heap_lo());//存储空闲链表第一个块的位置(记录的是与mem_heap_lo()的插值 (2^32 bit) )(一开始为0)
-	PUT(LIST_END+4,LIST_BEGIN-mem_heap_lo());//存储空闲链表第一个块的位置(记录的是与mem_heap_lo()的插值 (2^32 bit) )(一开始为0)
+	for(int i=2;i<=31;i++){
+		PUT(LIST_BEGIN(i),LIST_END(i)-mem_heap_lo());
+		PUT(LIST_END(i)+4,LIST_BEGIN(i)-mem_heap_lo());
+	}
 	return 0;
 }
-
-
-// static void AddToExplicitList(void *ptr){
-// 	void *ptr2=NEXT_LIST_P(LIST_BEGIN);
-// 	// printf("AddToExplicitList: ptr=%llx,ptr2=%llx\n",ptr,ptr2);
-// 	PUT(LIST_BEGIN,ptr-mem_heap_lo()),PUT(ptr+4,LIST_BEGIN-mem_heap_lo());
-// 	PUT(ptr,ptr2-mem_heap_lo());
-// 	if(ptr2!=LIST_END)PUT(ptr2+4,ptr-mem_heap_lo());
-// }
-// static void DeleteFromExplicitList(void *ptr){
-// 	void *preP=PRE_LIST_P(ptr);
-// 	void *nextP=NEXT_LIST_P(ptr);
-// 	// printf("DeleteFromExplicitList: ptr=%llx,preP=%llx,nextP=%llx\n",ptr,preP,nextP);
-// 	PUT(preP,nextP-mem_heap_lo());
-// 	if(nextP!=LIST_END)PUT(nextP+4,preP-mem_heap_lo());
-// }
-
+static inline int GetListId(unsigned int size){
+	if(size<(1<<17)){//[2,16]
+		if(size<(1<<9)){//[2,8]
+			if(size<(1<<5)){//[2,4]
+				if((size>>4)&1)return 4;
+				if((size>>3)&1)return 3;
+				if((size>>2)&1)return 2;
+			}
+			else {//[5,8]
+				if((size>>8)&1)return 8;
+				if((size>>7)&1)return 7;
+				if((size>>6)&1)return 6;
+				if((size>>5)&1)return 5;
+			}
+		}
+		else {//[9,16]
+			if(size<(1<<13)){//[9,12]
+				if((size>>12)&1)return 12;
+				if((size>>11)&1)return 11;
+				if((size>>10)&1)return 10;
+				if((size>>9)&1)return 9;
+			}
+			else {//[13,16]
+				if((size>>16)&1)return 16;
+				if((size>>15)&1)return 15;
+				if((size>>14)&1)return 14;
+				if((size>>13)&1)return 13;
+			}
+		}
+	}
+	else {//[17,31]
+		if(size<(1<<24)){//[17,23]
+			if(size<(1<<20)){//[17,19]
+				if((size>>19)&1)return 19;
+				if((size>>18)&1)return 18;
+				if((size>>17)&1)return 17;
+			}
+			else {//[20,23]
+				if((size>>23)&1)return 23;
+				if((size>>22)&1)return 22;
+				if((size>>21)&1)return 21;
+				if((size>>20)&1)return 20;
+			}
+		}
+		else {//[24,31]
+			if(size<(1<<28)){//[24,27]
+				if((size>>27)&1)return 27;
+				if((size>>26)&1)return 26;
+				if((size>>25)&1)return 25;
+				if((size>>24)&1)return 24;
+			}
+			else {//[27,31]
+				if((size>>31)&1)return 31;
+				if((size>>30)&1)return 30;
+				if((size>>29)&1)return 29;
+				if((size>>28)&1)return 28;
+			}
+		}
+	}
+	// for(int i=31;i>=2;i--)if((size>>i)&1)return i;
+	return -1;
+}
+static void AddToExplicitList(void *ptr){
+	int id=GetListId(GET_SIZE(HEAD(ptr)));
+	void *ptr2=NEXT_LIST_P(LIST_BEGIN(id));
+	// printf("AddToExplicitList: ptr=%llx,ptr2=%llx\n",ptr,ptr2);
+	PUT(LIST_BEGIN(id),ptr-mem_heap_lo()),PUT(ptr+4,LIST_BEGIN(id)-mem_heap_lo());
+	PUT(ptr,ptr2-mem_heap_lo()),PUT(ptr2+4,ptr-mem_heap_lo());
+}
+#else
+int mm_init(void){
+	// printf("\ninit %llx %llx %llx %llx\n",mem_heap_lo(),mem_heap_hi(),mem_heapsize(),mem_sbrk(0));
+	mem_sbrk(INIT_SIZE);//p=mem_heap_lo()
+	PUT(LIST_BEGIN,LIST_END-mem_heap_lo());//记录的是与mem_heap_lo()的插值 (2^32 bit)
+	PUT(LIST_END+4,LIST_BEGIN-mem_heap_lo());
+	return 0;
+}
 static void AddToExplicitList(void *ptr){
 	void *ptr2=NEXT_LIST_P(LIST_BEGIN);
 	// printf("AddToExplicitList: ptr=%llx,ptr2=%llx\n",ptr,ptr2);
 	PUT(LIST_BEGIN,ptr-mem_heap_lo()),PUT(ptr+4,LIST_BEGIN-mem_heap_lo());
 	PUT(ptr,ptr2-mem_heap_lo()),PUT(ptr2+4,ptr-mem_heap_lo());
 }
+#endif
 static void DeleteFromExplicitList(void *ptr){
 	void *preP=PRE_LIST_P(ptr);
 	void *nextP=NEXT_LIST_P(ptr);
 	// printf("DeleteFromExplicitList: ptr=%llx,preP=%llx,nextP=%llx\n",ptr,preP,nextP);
 	PUT(preP,nextP-mem_heap_lo()),PUT(nextP+4,preP-mem_heap_lo());
 }
+
+
+
 
 static void *extend_heap(size_t size){
 	unsigned int newsize=ALIGN(size);
@@ -139,6 +221,7 @@ static void SPLIT(void *p,unsigned int size1){
  * malloc - Allocate a block by incrementing the brk pointer.
  *			Always allocate a block whose size is a multiple of the alignment.
  */
+#ifdef SEGREGATE
 void *malloc(size_t size){
 	if(size==0)return NULL;
 	// printf("%llx %llx %llx %llx\n",mem_heap_lo(),mem_heap_hi(),mem_heapsize(),mem_sbrk(0));
@@ -159,19 +242,24 @@ void *malloc(size_t size){
 	// 	}
 	// }
 	{//first fit;等价于insert new free block into tail
-		void *currentp=PRE_LIST_P(LIST_END);
-		while(currentp!=LIST_BEGIN){
-			// printf("currentp: %llx\n",currentp);
-			if(GET_SIZE(HEAD(currentp))>=ALIGN(size)){
-				// printf("check %llx %llx\n",HEAD(currentp),TAIL(currentp));
-				if(GET_SIZE(HEAD(currentp))>ALIGN(size)+8)SPLIT(currentp,ALIGN(size));
-				PUT(HEAD(currentp),GET_SIZE(HEAD(currentp))|1);
-				PUT(TAIL(currentp),GET_SIZE(TAIL(currentp))|1);
-				DeleteFromExplicitList(currentp);
-				// printf("!!! malloc %d: %llx\n",size,currentp);
-				return currentp;
+		int id=GetListId(ALIGN(size));
+		while(id<=31){
+			// printf("size=%u,id=%d\n",size,id);
+			void *currentp=PRE_LIST_P(LIST_END(id));
+			while(currentp!=LIST_BEGIN(id)){
+				// printf("currentp: %llx\n",currentp);
+				if(GET_SIZE(HEAD(currentp))>=ALIGN(size)){
+					// printf("check %llx %llx\n",HEAD(currentp),TAIL(currentp));
+					if(GET_SIZE(HEAD(currentp))>ALIGN(size)+8)SPLIT(currentp,ALIGN(size));
+					PUT(HEAD(currentp),GET_SIZE(HEAD(currentp))|1);
+					PUT(TAIL(currentp),GET_SIZE(TAIL(currentp))|1);
+					DeleteFromExplicitList(currentp);
+					// printf("!!! malloc %d: %llx\n",size,currentp);
+					return currentp;
+				}
+				currentp=PRE_LIST_P(currentp);
 			}
-			currentp=PRE_LIST_P(currentp);
+			id++;
 		}
 	}
 	// {//best fit
@@ -198,12 +286,87 @@ void *malloc(size_t size){
 static bool try_merge(void *ptr1,void *ptr2){
 	// printf("try_merge: %llx %llx\n",ptr1,ptr2);
 	if(GET_ALLOC(HEAD(ptr1)) || GET_ALLOC(HEAD(ptr2)) ) return 0;
+	// printf("merge: %llx %llx\n",ptr1,ptr2);
+	unsigned int totsize=GET_SIZE(HEAD(ptr1))+GET_SIZE(HEAD(ptr2))+8;
+	PUT(HEAD(ptr1),totsize|0);
+	PUT(TAIL(ptr2),totsize|0);
+	DeleteFromExplicitList(ptr1);
+	DeleteFromExplicitList(ptr2);
+	AddToExplicitList(ptr1);
+	return 1;
+}
+#else
+int totNum=0,totSum=0;
+void *malloc(size_t size){
+	if(size==0)return NULL;
+	// printf("%llx %llx %llx %llx\n",mem_heap_lo(),mem_heap_hi(),mem_heapsize(),mem_sbrk(0));
+	// {//first fit;等价于insert new free block into head
+	// 	void *currentp=NEXT_LIST_P(LIST_BEGIN);
+	// 	while(currentp!=LIST_END){
+	// 		// printf("currentp: %llx\n",currentp);
+	// 		if(GET_SIZE(HEAD(currentp))>=ALIGN(size)){
+	// 			// printf("check %llx %llx\n",HEAD(currentp),TAIL(currentp));
+	// 			if(GET_SIZE(HEAD(currentp))>ALIGN(size)+8)SPLIT(currentp,ALIGN(size));
+	// 			PUT(HEAD(currentp),GET_SIZE(HEAD(currentp))|1);
+	// 			PUT(TAIL(currentp),GET_SIZE(TAIL(currentp))|1);
+	// 			DeleteFromExplicitList(currentp);
+	// 			// printf("!!! malloc %d: %llx\n",size,currentp);
+	// 			return currentp;
+	// 		}
+	// 		currentp=NEXT_LIST_P(currentp);
+	// 	}
+	// }
+	{//first fit;等价于insert new free block into tail
+		totNum++;
+		void *currentp=PRE_LIST_P(LIST_END);
+		while(currentp!=LIST_BEGIN){
+			totSum++;
+			// printf("currentp: %llx\n",currentp);
+			if(GET_SIZE(HEAD(currentp))>=ALIGN(size)){
+				// printf("check %llx %llx\n",HEAD(currentp),TAIL(currentp));
+				if(GET_SIZE(HEAD(currentp))>ALIGN(size)+8)SPLIT(currentp,ALIGN(size));
+				PUT(HEAD(currentp),GET_SIZE(HEAD(currentp))|1);
+				PUT(TAIL(currentp),GET_SIZE(TAIL(currentp))|1);
+				DeleteFromExplicitList(currentp);
+				// printf("!!! malloc %d: %llx\n",size,currentp);
+				return currentp;
+			}
+			currentp=PRE_LIST_P(currentp);
+		}
+		if(totNum%10000==0)printf("totNum=%d,totSum/totNum=%lf\n",totNum,1.0*totSum/totNum);
+	}
+	// {//best fit
+	// 	void *currentp=NEXT_LIST_P(LIST_BEGIN);
+	// 	void *bestP=NULL;
+	// 	while(currentp!=LIST_END){
+	// 		// printf("currentp: %llx\n",currentp);
+	// 		if(!GET_ALLOC(HEAD(currentp)) && GET_SIZE(HEAD(currentp))>=ALIGN(size)){
+	// 			if(bestP==NULL || GET_SIZE(HEAD(currentp))<GET_SIZE(HEAD(bestP)))bestP=currentp;
+	// 		}
+	// 		currentp=NEXT_LIST_P(currentp);
+	// 	}
+	// 	if(bestP!=NULL){
+	// 		if(GET_SIZE(HEAD(bestP))>ALIGN(size)+8)SPLIT(bestP,ALIGN(size));
+	// 		PUT(HEAD(bestP),GET_SIZE(HEAD(bestP))|1);
+	// 		PUT(TAIL(bestP),GET_SIZE(TAIL(bestP))|1);
+	// 		DeleteFromExplicitList(bestP);
+	// 		// printf("!!! malloc %d: %llx\n",size,bestP);
+	// 		return bestP;
+	// 	}
+	// }
+	return extend_heap(size);
+}
+static bool try_merge(void *ptr1,void *ptr2){
+	// printf("try_merge: %llx %llx\n",ptr1,ptr2);
+	if(GET_ALLOC(HEAD(ptr1)) || GET_ALLOC(HEAD(ptr2)) ) return 0;
+	// printf("merge: %llx %llx\n",ptr1,ptr2);
 	unsigned int totsize=GET_SIZE(HEAD(ptr1))+GET_SIZE(HEAD(ptr2))+8;
 	PUT(HEAD(ptr1),totsize|0);
 	PUT(TAIL(ptr2),totsize|0);
 	DeleteFromExplicitList(ptr2);
 	return 1;
 }
+#endif
 /*
  * free - We don't know how to free a block.	So we ignore this call.
  *			Computers have big memories; surely it won't be a problem.
@@ -279,18 +442,26 @@ void *calloc (size_t nmemb, size_t size){
  * mm_checkheap - There are no bugs in my code, so I don't need to check,
  *			so nah!
  */
-// void mm_checkheap(int verbose){
-// 	/*Get gcc to be quiet. */
-// 	printf("-------begin check-------\n");
-// 	void *p=LIST_BEGIN;
-// 	p=NEXT_LIST_P(p);
-// 	while(p!=LIST_END){
-// 		printf("%llx\n",p);
-// 		p=NEXT_LIST_P(p);
-// 	}
-// 	printf("-------end check-------\n");
-// 	verbose = verbose;
-// }
+#ifdef SEGREGATE
+void mm_checkheap(int verbose){
+	/*Get gcc to be quiet. */
+	printf("-------begin check-------\n");
+	for(int i=2;i<=31;i++){
+		void *pre_p=LIST_BEGIN(i),*p=NEXT_LIST_P(pre_p);
+		while(p!=LIST_END(i)){
+			printf("%llx\n",(unsigned long long)p);
+			if(PRE_LIST_P(p)!=pre_p){
+				printf("Wrong !!!\n");
+				assert(0);
+			}
+			pre_p=p;
+			p=NEXT_LIST_P(p);
+		}
+	}
+	printf("-------end check-------\n");
+	verbose=verbose;
+}
+#else
 void mm_checkheap(int verbose){
 	/*Get gcc to be quiet. */
 	printf("-------begin check-------\n");
@@ -305,5 +476,6 @@ void mm_checkheap(int verbose){
 		p=NEXT_LIST_P(p);
 	}
 	printf("-------end check-------\n");
-	verbose = verbose;
+	verbose=verbose;
 }
+#endif
