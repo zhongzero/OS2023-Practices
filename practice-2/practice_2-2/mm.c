@@ -51,7 +51,13 @@
 
 // #define SIZE_PTR(p)	((size_t*)(((char*)(p)) - SIZE_T_SIZE))
 
-#define CHUNKSIZE 1024
+
+/*是否使用segregated lists*/
+#define SEGREGATE
+/*下面三选一*/
+// #define FIRST_FIT__AND_INSERT_HEAD
+#define FIRST_FIT__AND_INSERT_TAIL
+// #define BEST_FIT
 
 #define GET(p) (*(unsigned int*)(p))
 #define PUT(p,val) (*(unsigned int*)(p)=(val))
@@ -68,16 +74,8 @@
 #define NEXT_LIST_P(p) (mem_heap_lo()+GET(p))
 #define PRE_LIST_P(p) (mem_heap_lo()+GET((char*)(p)+4))
 
-/*是否使用segregated lists*/
-#define SEGREGATE
-/*下面三选一*/
-#define FIRST_FIT__AND_INSERT_HEAD
-// #define FIRST_FIT__AND_INSERT_TAIL
-// #define BEST_FIT
-
-
 #ifdef SEGREGATE
-#define INIT_SIZE (8*30)
+#define INIT_SIZE (8*10)
 #define LIST_BEGIN(p) (mem_heap_lo()+((p)-2)*8)
 #define LIST_END(p) (mem_heap_lo()+((p)-2)*8)
 #else
@@ -88,8 +86,9 @@
 
 
 /*
-[2^2,2^3),[2^3,2^4),...,[2^31,2^32)
-[2^p,2^(p+1))    (2<=p<=31)
+[2^2,2^3),[2^3,2^4),...,[2^10,2^11)  ,  [2^11,2^32)
+[2^p,2^(p+1))  ,(2<=p<=10)
+[2^11,2^32)    ,(p=11)
 */
 
 /*
@@ -99,72 +98,36 @@
 int mm_init(void){
 	// printf("\ninit %llx %llx %llx %llx\n",mem_heap_lo(),mem_heap_hi(),mem_heapsize(),mem_sbrk(0));
 	mem_sbrk(INIT_SIZE);//p=mem_heap_lo()
-	for(int i=2;i<=31;i++){
+	for(int i=2;i<=11;i++){
 		PUT(LIST_BEGIN(i),LIST_END(i)-mem_heap_lo());
 		PUT(LIST_END(i)+4,LIST_BEGIN(i)-mem_heap_lo());
 	}
 	return 0;
 }
 static inline int GetListId(unsigned int size){
-	if(size<(1<<17)){//[2,16]
-		if(size<(1<<9)){//[2,8]
-			if(size<(1<<5)){//[2,4]
-				if((size>>4)&1)return 4;
-				if((size>>3)&1)return 3;
-				if((size>>2)&1)return 2;
-			}
-			else {//[5,8]
-				if((size>>8)&1)return 8;
-				if((size>>7)&1)return 7;
-				if((size>>6)&1)return 6;
-				if((size>>5)&1)return 5;
-			}
+	if(size>=(1<<11))return 11;
+	if(size<(1<<6)){//[2,5]
+		if(size<(1<<4)){//[2,3]
+			if((size>>3)&1)return 3;
+			if((size>>2)&1)return 2;
 		}
-		else {//[9,16]
-			if(size<(1<<13)){//[9,12]
-				if((size>>12)&1)return 12;
-				if((size>>11)&1)return 11;
-				if((size>>10)&1)return 10;
-				if((size>>9)&1)return 9;
-			}
-			else {//[13,16]
-				if((size>>16)&1)return 16;
-				if((size>>15)&1)return 15;
-				if((size>>14)&1)return 14;
-				if((size>>13)&1)return 13;
-			}
+		else {//[4,5]
+			if((size>>5)&1)return 5;
+			if((size>>4)&1)return 4;
 		}
 	}
-	else {//[17,31]
-		if(size<(1<<24)){//[17,23]
-			if(size<(1<<20)){//[17,19]
-				if((size>>19)&1)return 19;
-				if((size>>18)&1)return 18;
-				if((size>>17)&1)return 17;
-			}
-			else {//[20,23]
-				if((size>>23)&1)return 23;
-				if((size>>22)&1)return 22;
-				if((size>>21)&1)return 21;
-				if((size>>20)&1)return 20;
-			}
+	else {//[6,10]
+		if(size<(1<<8)){//[6,7]
+			if((size>>7)&1)return 7;
+			if((size>>6)&1)return 6;
 		}
-		else {//[24,31]
-			if(size<(1<<28)){//[24,27]
-				if((size>>27)&1)return 27;
-				if((size>>26)&1)return 26;
-				if((size>>25)&1)return 25;
-				if((size>>24)&1)return 24;
-			}
-			else {//[27,31]
-				if((size>>31)&1)return 31;
-				if((size>>30)&1)return 30;
-				if((size>>29)&1)return 29;
-				if((size>>28)&1)return 28;
-			}
+		else {//[8,10]
+			if((size>>10)&1)return 10;
+			if((size>>9)&1)return 9;
+			if((size>>8)&1)return 8;
 		}
 	}
-	// for(int i=31;i>=2;i--)if((size>>i)&1)return i;
+	// for(int i=10;i>=2;i--)if((size>>i)&1)return i;
 	return -1;
 }
 static void AddToExplicitList(void *ptr){
@@ -232,7 +195,7 @@ void *malloc(size_t size){
 	#ifdef FIRST_FIT__AND_INSERT_HEAD
 	{//first fit;等价于insert new free block into head
 		int id=GetListId(ALIGN(size));
-		while(id<=31){
+		while(id<=11){
 			void *currentp=NEXT_LIST_P(LIST_BEGIN(id));
 			while(currentp!=LIST_END(id)){
 				// printf("currentp: %llx\n",currentp);
@@ -254,7 +217,7 @@ void *malloc(size_t size){
 	#ifdef FIRST_FIT__AND_INSERT_TAIL
 	{//first fit;等价于insert new free block into tail
 		int id=GetListId(ALIGN(size));
-		while(id<=31){
+		while(id<=11){
 			// printf("size=%u,id=%d\n",size,id);
 			void *currentp=PRE_LIST_P(LIST_END(id));
 			while(currentp!=LIST_BEGIN(id)){
@@ -277,7 +240,7 @@ void *malloc(size_t size){
 	#ifdef BEST_FIT
 	{//best fit
 		int id=GetListId(ALIGN(size));
-		while(id<=31){
+		while(id<=11){
 			void *currentp=NEXT_LIST_P(LIST_BEGIN(id));
 			void *bestP=NULL;
 			while(currentp!=LIST_END(id)){
@@ -464,7 +427,7 @@ void *calloc (size_t nmemb, size_t size){
 void mm_checkheap(int verbose){
 	/*Get gcc to be quiet. */
 	printf("-------begin check-------\n");
-	for(int i=2;i<=31;i++){
+	for(int i=2;i<=11;i++){
 		void *pre_p=LIST_BEGIN(i),*p=NEXT_LIST_P(pre_p);
 		while(p!=LIST_END(i)){
 			printf("%llx\n",(unsigned long long)p);
