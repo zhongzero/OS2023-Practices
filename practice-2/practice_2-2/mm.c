@@ -60,12 +60,14 @@
 /*是否使用segregated lists*/
 #define SEGREGATE
 /*下面三选一*/
-#define FIRST_FIT__AND_INSERT_HEAD
-// #define FIRST_FIT__AND_INSERT_TAIL
+// #define FIRST_FIT__AND_INSERT_HEAD
+#define FIRST_FIT__AND_INSERT_TAIL
 // #define BEST_FIT
 
 #ifdef SEGREGATE
 #define MAXCHECKLISTNUM 3//设当前寻找的块大小在list(x),则表示最多检查到list(x+MAXCHECKLISTNUM) (开成11表示全部检查)
+#else
+#define MAXCHECKNUM 40//最多往后寻找的块个数
 #endif
 
 #define max(a,b) ((a)>(b)?(a):(b))
@@ -329,6 +331,7 @@ void *malloc(size_t size){
 	#ifdef FIRST_FIT__AND_INSERT_HEAD
 	{//first fit;等价于insert new free block into head
 		void *currentp=NEXT_LIST_P2(LIST_BEGIN2);
+		int checknum=0;
 		while(currentp!=LIST_END2){
 			// printf("currentp: %llx\n",currentp);
 			if(GET_SIZE(HEAD(currentp))>=ALIGN(size)){
@@ -343,6 +346,7 @@ void *malloc(size_t size){
 				return currentp;
 			}
 			currentp=NEXT_LIST_P2(currentp);
+			if(++checknum>=MAXCHECKNUM)break;
 		}
 	}
 	#endif
@@ -350,6 +354,7 @@ void *malloc(size_t size){
 	{//first fit;等价于insert new free block into tail
 		// totNum++;
 		void *currentp=PRE_LIST_P2(LIST_END2);
+		int checknum=0;
 		while(currentp!=LIST_BEGIN2){
 			// totSum++;
 			// printf("currentp: %llx\n",currentp);
@@ -365,6 +370,7 @@ void *malloc(size_t size){
 				return currentp;
 			}
 			currentp=PRE_LIST_P2(currentp);
+			if(++checknum>=MAXCHECKNUM)break;
 		}
 		// if(totNum%10000==0)printf("totNum=%d,totSum/totNum=%lf\n",totNum,1.0*totSum/totNum);
 	}
