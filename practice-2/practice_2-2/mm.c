@@ -480,23 +480,34 @@ void mm_checkheap(int verbose){
 	/*Get gcc to be quiet. */
 	// printf("-------begin check-------\n");
 	/*check explicit segregated lists*/
+	int num1=0,num2=0;
 	for(int i=2;i<=11;i++){
 		if(LIST_BEGIN(i)!=mem_heap_lo()+((i)-2)*8)assert(0);
 		void *pre_p=LIST_BEGIN(i),*p=NEXT_LIST_P(pre_p);
 		while(p!=LIST_END(i)){
 			if(p<mem_heap_lo()+80||p>mem_heap_hi())assert(0);
 			if(PRE_LIST_P(p)!=pre_p)assert(0);
+			if(GET_ALLOC(HEAD(p)))assert(0);
+			num1++;
 			pre_p=p;
 			p=NEXT_LIST_P(p);
 		}
 	}
 	/*check implicit list*/
 	void *pre_p=mem_heap_lo()+INIT_SIZE+8,*p=NEXT_P(pre_p);
+	if(pre_p<=mem_heap_hi()&& !GET_ALLOC(HEAD(pre_p)) )num2++;
 	while(p<=mem_heap_hi()){
-		if(PRE_P(p)!=pre_p)assert(0);
+		assert(PRE_P(p)==pre_p);
+		assert(GET_SIZE(HEAD(p))%8==0);
+		assert((unsigned long long)p%8==0);
+		if(!GET_ALLOC(HEAD(p)))num2++;
+		assert( GET_ALLOC(HEAD(pre_p)) || GET_ALLOC(HEAD(p)) );
+		assert(TAIL(pre_p)+4==HEAD(p));
 		pre_p=p;
 		p=NEXT_P(p);
 	}
+	// printf("%d %d\n",num1,num2);
+	assert(num1==num2);
 	
 	// printf("-------end check-------\n");
 	verbose=verbose;
@@ -508,19 +519,30 @@ void mm_checkheap(int verbose){
 	*/
 	/*Get gcc to be quiet. */
 	// printf("-------begin check-------\n");
+	int num1=0,num2=0;
 	void *pre_p=LIST_BEGIN,*p=NEXT_LIST_P(pre_p);
 	while(p!=LIST_END){
 		if(PRE_LIST_P(p)!=pre_p)assert(0);
+		if(GET_ALLOC(HEAD(p)))assert(0);
+		num1++;
 		pre_p=p;
 		p=NEXT_LIST_P(p);
 	}
 	/*check implicit list*/
 	pre_p=mem_heap_lo()+INIT_SIZE+8,p=NEXT_P(pre_p);
+	if(pre_p<=mem_heap_hi()&& !GET_ALLOC(HEAD(pre_p)) )num2++;
 	while(p<=mem_heap_hi()){
-		if(PRE_P(p)!=pre_p)assert(0);
+		assert(PRE_P(p)==pre_p);
+		assert(GET_SIZE(HEAD(p))%8==0);
+		assert((unsigned long long)p%8==0);
+		if(!GET_ALLOC(HEAD(p)))num2++;
+		assert( GET_ALLOC(HEAD(pre_p)) || GET_ALLOC(HEAD(p)) );
+		assert(TAIL(pre_p)+4==HEAD(p));
 		pre_p=p;
 		p=NEXT_P(p);
 	}
+	// printf("%d %d\n",num1,num2);
+	assert(num1==num2);
 	// printf("-------end check-------\n");
 	verbose=verbose;
 }
