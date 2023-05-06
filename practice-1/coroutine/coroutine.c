@@ -10,8 +10,13 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include <assert.h>
-#define STACK_SIZE (1<<18)
-#define CO_SIZE 128
+#include <pthread.h>
+#define STACK_SIZE (1<<13)
+#define CO_SIZE 500
+#define PTHREAD_SIZE 105
+
+pthread_mutex_t mutex;
+
 enum co_status {
 	CO_NEW, //新创建，还未执行过
 	CO_RUNNING, //已经执行过
@@ -30,60 +35,79 @@ struct co {
 	unsigned char	stack[STACK_SIZE]; //协程的堆栈
 
 };
+static struct AllCoroutineInOnePthread{
+	bool pthread_use;
+	pthread_t pid;
+	struct co **co_arr;
+	bool use[CO_SIZE];
+	int current_id;
+	int co_retans[CO_SIZE];
+	int yield_given_id;
+}pthread[PTHREAD_SIZE];
+static int tot_pthread_size=0;
 
-// struct co_node{
-// 	struct co co_val;
-// 	struct co *next;
-// };
-// struct co_List{
-// 	struct co_node *begin_co;
-// };
+static void create_pid(){
+	pthread_mutex_lock(&mutex);//tot_pthread_size多线程共用也要加锁保证线程安全,malloc需要加锁保证线程安全(有些版本malloc内部没上锁，虽然一般是加上的)
+	// printf("create: %ld\n",pthread_self());
+	int pid=tot_pthread_size;
+	pthread[pid].pthread_use=1,pthread[pid].pid=pthread_self();
+	tot_pthread_size++;
+	pthread_mutex_unlock(&mutex);
+	pthread[pid].co_arr=malloc(8*CO_SIZE);
+	pthread[pid].current_id=CO_SIZE-1; //main所在的coroutine
+	pthread[pid].co_arr[pthread[pid].current_id]=malloc(sizeof(struct co));
 
-static struct co **co_arr;
-static bool use[CO_SIZE];
-static int current_id;
-
-static int co_retans[CO_SIZE];
-
-int yield_given_id=-1;
+	for(int i=0;i<CO_SIZE;i++)pthread[pid].use[i]=0;
+	pthread[pid].use[pthread[pid].current_id]=1;
+	pthread[pid].co_arr[pthread[pid].current_id]->func=NULL; //不重要，main函数会自动调用
+	pthread[pid].co_arr[pthread[pid].current_id]->status=CO_RUNNING;
+	pthread[pid].co_arr[pthread[pid].current_id]->parent_id=-1;
+}
 
 __attribute__((constructor)) static void co_initial(){//这里有问题，因为多线程下其他线程初始化时进不来这里，待修改！！
-	co_arr=malloc(8*CO_SIZE);
-	for(int i=0;i<CO_SIZE;i++)use[i]=0;
-	current_id=CO_SIZE-1; //main所在的coroutine
-	use[current_id]=1;
-	co_arr[current_id]=malloc(sizeof(struct co));
-	co_arr[current_id]->func=NULL; //不重要，main函数会自动调用
-	co_arr[current_id]->status=CO_RUNNING;
-	co_arr[current_id]->parent_id=-1;
-	// co_arr[current_id]->waiterList=malloc(sizeof(struct co_List));
+	// printf("%ld\n",pthread_self());
+	for(int i=0;i<PTHREAD_SIZE;i++)pthread[i].pthread_use=0,pthread[i].yield_given_id=-1;
+	create_pid();
 }
 
 __attribute__((destructor)) static void co_finish(){
-	for(int i=0;i<CO_SIZE;i++){
-		if(use[i])free(co_arr[i]);
+	for(int i=0;i<tot_pthread_size;i++){
+		for(int j=0;j<CO_SIZE;j++){
+			if(pthread[i].use[j])free(pthread[i].co_arr[j]);
+		}
+		free(pthread[i].co_arr);
 	}
-	free(co_arr);
 }
 
-static int Find_spare_cid(){
-	for(int i=0;i<CO_SIZE;i++){
-		if(use[i]==0)return i;
+int g_pid,g_i,g_pid_self;
+
+static int getPid(){
+	pthread_t pid=pthread_self();
+	// printf("ask: %ld\n",pid);
+	for(int i=0;i<tot_pthread_size;i++){
+		if(pthread[i].pid==pid)return i;
 	}
 	return -1;
 }
-static int Find_other_co(){//若是多线程，可能需要修改只能yield给同一线程的协程
+
+static int Find_spare_cid(int pid){
+	for(int i=0;i<CO_SIZE;i++){
+		if(pthread[pid].use[i]==0)return i;
+	}
+	return -1;
+}
+static int Find_other_co(int pid){//若是多线程，可能需要修改只能yield给同一线程的协程
 	for(int i=0;i<CO_SIZE;i++){
 	// for(int i=CO_SIZE-1;i>=0;i--){
-		if(i==current_id)continue;
-		if(use[i]==1 && (co_arr[i]->status==CO_NEW||co_arr[i]->status==CO_RUNNING) )return i;
+		if(i==pthread[pid].current_id)continue;
+		if(pthread[pid].use[i]==1 && (pthread[pid].co_arr[i]->status==CO_NEW||pthread[pid].co_arr[i]->status==CO_RUNNING) )return i;
 	}
 	return -1;
 }
-static bool IsAncestor(int id1,int id2){//if id1 is id2's ancestor, return 1(包括自己)
+static bool IsAncestor(int pid,int id1,int id2){//if id1 is id2's ancestor, return 1(包括自己)
 	while(id2!=-1){
 		if(id2==id1)return 1;
-		id2=co_arr[id2]->parent_id;
+		id2=pthread[pid].co_arr[id2]->parent_id;
 	}
 	return 0;
 }
@@ -91,27 +115,41 @@ int co_start(int (*routine)(void)){	//返回cid
 	/*
 	要求一执行co_start就直接执行这个新协程
 	*/
-	int id=Find_spare_cid();
+	int pid=getPid();
+	if(pid==-1){//如果不存在这个线程就创建
+		create_pid();
+		pid=getPid();
+	}
+	// printf("!!! pid=%d\n",pid);
+	int id=Find_spare_cid(pid);
 	if(id==-1){
 		printf("co number is full!\n");
 		assert(0);
 	}
-	use[id]=1;
-	co_arr[id]=malloc(sizeof(struct co));
-	co_arr[id]->func=(void*)routine;
-	co_arr[id]->status=CO_NEW;
-	co_arr[id]->parent_id=current_id;
-	yield_given_id=id;//指定yield给的id,在co_yield中改回-1
+	pthread[pid].use[id]=1;
+	pthread_mutex_lock(&mutex);//malloc需要加锁保证线程安全(有些版本malloc内部没上锁，虽然一般是加上的)
+	pthread[pid].co_arr[id]=malloc(sizeof(struct co));
+	pthread_mutex_unlock(&mutex);
+	pthread[pid].co_arr[id]->func=(void*)routine;
+	pthread[pid].co_arr[id]->status=CO_NEW;
+	pthread[pid].co_arr[id]->parent_id=pthread[pid].current_id;
+	pthread[pid].yield_given_id=id;//指定yield给的id,在co_yield中改回-1
 	co_yield();
 	// printf("!!!co_start end\n");
 	return id;
 }
 int co_getid(){
-	return current_id;
+	int pid=getPid();
+	return pthread[pid].current_id;
 }
 int co_getret(int cid){
-	assert(use[cid]==1&&co_arr[cid]->status==CO_DEAD);
-	return co_retans[cid];
+	int pid=getPid();
+	assert(pthread[pid].use[cid]==1);
+	while(pthread[pid].co_arr[cid]->status!=CO_DEAD){
+		pthread[pid].yield_given_id=cid;
+		co_yield();
+	}
+	return pthread[pid].co_retans[cid];
 }
 int co_yield(){
 	// unsigned long sp,bp;
@@ -145,32 +183,45 @@ int co_yield(){
 	的破坏描述部分加入"memory"描述符(这是嵌入汇编的格式)
 	("memory"描述符 的作用 是 告诉编译器 不要对这里汇编代码前后处的代码进行乱序优化，且不要将变量缓存到寄存器)
 	*/
-	int jmpval=setjmp(co_arr[current_id]->context);//设置jmp点，并且保留下此刻的寄存器状态
+	int pid=getPid();
+	int jmpval=setjmp(pthread[pid].co_arr[pthread[pid].current_id]->context);//设置jmp点，并且保留下此刻的寄存器状态
 	//若jmpval==0，表示是顺序执行下来的，即要自己yield给别人执行
 	//若jmpval==1，表示是被longjmp过来的，即退出yield函数即可
 	if(!jmpval){
 		// printf("set: %d\n",current_id);
-		int target_id=yield_given_id==-1?Find_other_co():yield_given_id;
-		if(yield_given_id!=-1)yield_given_id=-1;//把yield指定的id改回-1
+		int target_id=pthread[pid].yield_given_id==-1?Find_other_co(pid):pthread[pid].yield_given_id;
+		if(pthread[pid].yield_given_id!=-1)pthread[pid].yield_given_id=-1;//把yield指定的id改回-1
 		// printf("yield %d ---> %d\n",current_id,target_id);
 		// sleep(1);
 		if(target_id==-1)return 0;//没有其他协程存在，就不yield了
-		if(co_arr[target_id]->status==CO_NEW){//若是新进程是一个从未执行过的协程
+		if(pthread[pid].co_arr[target_id]->status==CO_NEW){//若是新进程是一个从未执行过的协程
 			// printf("co_arr[%d] -> co_arr[%d]\n",current_id,target_id);
-			current_id=target_id;
-			co_arr[current_id]->status=CO_RUNNING;
+			pthread[pid].current_id=target_id;
+			pthread[pid].co_arr[pthread[pid].current_id]->status=CO_RUNNING;
 			int retans=0;
-			asm volatile(
-		          "leaq -0x10(%1), %%rsp;movq %%rsp,%%rbp; call *%2; movl %%eax,%0;"
+			__asm__ __volatile__(
+		          "leaq -0x50(%1), %%rsp;leaq -0x0(%1), %%rbp; call *%2; movl %%eax,%0;"
 		        : "=m"(retans)
-		        : "r"((uintptr_t)co_arr[target_id]->stack+STACK_SIZE), "r"((uintptr_t)co_arr[target_id]->func)
+		        : "r"((uintptr_t)pthread[pid].co_arr[target_id]->stack+STACK_SIZE), "r"((uintptr_t)pthread[pid].co_arr[target_id]->func)
 				: "eax","memory"
 		    );
 			/*
-			首先更改%sp到堆中的地址上，%bp也要改过去(call之后%bp会自己调整)，接着call新协程对应的函数入口，最后把返回值(%eax)记下来
+			首先更改%sp到堆中的地址上，%bp也要改过去(call之后%bp会自己调整)
+			(注意此时要给%bp和%sp中间留足够的空间，因为接下来调用的局部变量是根据%bp进行偏移的，编译器转成汇编认为%bp和%sp都没有变化，偏移也是按原来的偏移，所以这里%bp和%sp之间的空间要大于原来之间的空间接下来才能调用局部变量)
+			接着call新协程对应的函数入口，最后把返回值(%eax)记下来
 			(%bp是栈底，即当前函数的基础地址)(必须把%bp也修改掉，不然可能会影响原来位置上的数据导致出现问题)
 			*/
-			co_retans[current_id]=retans;
+			// unsigned long sp,bp;
+			// asm volatile(
+		    //       "movq %%rsp, %0; movq %%rbp, %1;"
+		    //     : "=m"(sp),"=m"(bp)
+		    //     :
+			// 	: "memory"
+		    // );
+			// printf("sp=%lx,bp=%lx\n",sp,bp);
+			int pid=getPid();
+			// printf("@@@ pid=%d,retans=%d\n",pid,retans);
+			pthread[pid].co_retans[pthread[pid].current_id]=retans;
 			/*
 			执行到这里表示上述调用的协程已经执行完毕并把return的答案记录下来并已经把协程的sp换回来了
 			注意：此时的栈可能全部被毁了，因为可能之前什么时候重新jmp到这个协程，再执行一段事件后重新yield，而这段时间栈被全部改造过了，
@@ -178,14 +229,15 @@ int co_yield(){
 			即这里返回后，不能在调用之前栈上的任何信息了，包括target_id
 			*/
 			// printf("co_arr[%d] is dead\n",current_id);
-			co_arr[current_id]->status=CO_DEAD;
+			pthread[pid].co_arr[pthread[pid].current_id]->status=CO_DEAD;
 			//由于栈已经不再是原来的栈了，所以这里只能继续yield而没有办法把current_id改回去了
+
 			co_yield();
 		}
 		else{//若是新进程是一个曾经执行过然后yield出来的协程
 			// printf("co_arr[%d] -> co_arr[%d]\n",current_id,target_id);
-			current_id=target_id;
-			longjmp(co_arr[target_id]->context,1);
+			pthread[pid].current_id=target_id;
+			longjmp(pthread[pid].co_arr[target_id]->context,1);
 		}
 	}
 	else {
@@ -202,10 +254,11 @@ int co_yield(){
 	return 0;
 }
 int co_waitall(){
+	int pid=getPid();
 	while(1){
 		bool flag=0;
 		for(int i=0;i<CO_SIZE;i++){
-			if(i!=current_id&&use[i]&&co_arr[i]->status!=CO_DEAD){
+			if(i!=pthread[pid].current_id&&pthread[pid].use[i]&&pthread[pid].co_arr[i]->status!=CO_DEAD){
 				flag=1;
 				break;
 			}
@@ -216,20 +269,22 @@ int co_waitall(){
 	return 0;
 }
 int co_wait(int cid){
-	assert(use[cid]==1);
+	int pid=getPid();
+	assert(pthread[pid].use[cid]==1);
 	//这里必须写while直到cid结束，因为yield出去可能由于cid再次yield返回该协程，但此时cid并没有结束
-	while(co_arr[cid]->status!=CO_DEAD){
-		yield_given_id=cid;
+	while(pthread[pid].co_arr[cid]->status!=CO_DEAD){
+		pthread[pid].yield_given_id=cid;
 		co_yield();
 	}
 	return 0;
 }
 int co_status(int cid){
-	assert(use[cid]==1);
-	if(IsAncestor(current_id,cid)){
-		if(co_arr[cid]->status==CO_DEAD)return FINISHED;
+	int pid=getPid();
+	assert(pthread[pid].use[cid]==1);
+	if(IsAncestor(pid,pthread[pid].current_id,cid)){
+		if(pthread[pid].co_arr[cid]->status==CO_DEAD)return FINISHED;
 		else {
-			printf("%d %d\n",cid,co_arr[cid]->status);
+			// printf("%d %d\n",cid,pthread[pid].co_arr[cid]->status);
 			return RUNNING;
 		}
 	}

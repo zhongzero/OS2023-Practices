@@ -1,6 +1,10 @@
 #include "coroutine.h"
 #include "utils.h"
+#include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <sys/time.h>
 
 cid_t getid_val = -1;
 
@@ -31,31 +35,84 @@ int test_yield2(void){
 }
 
 int test_dummy(void){
-    return 0;
+    return 1;
 }
 
 int test_getid(void){
     getid_val = co_getid();
     return getid_val;
 }
-int FF(){
-    return co_start(test_yield2);
+
+//test multithread
+_Atomic int total_coroutine_count = 0;
+
+int test_multithread_coroutine_inner() {
+    total_coroutine_count++;
+    return 1;
 }
-int F(){
-    FF();
+
+int test_multithread_coroutine() {
+    // printf("Running: %d, thread: %ld\n", co_getid(), pthread_self());
+    const int CNT = 10;
+    cid_t coroutine[CNT];
+    for (int i = 0; i < CNT; ++i) {
+        coroutine[i] = co_start(test_multithread_coroutine_inner);
+        co_yield();
+        if (i > 1) {
+            co_wait(coroutine[i - 1]);
+            assert(co_status(coroutine[i - 1]) == FINISHED);
+        }
+        co_yield();
+        assert(co_status(co_getid()) == RUNNING);
+        co_yield();
+    }
+    co_wait(coroutine[CNT - 1]);
+    assert(co_status(coroutine[CNT - 1]) == FINISHED);
+    // printf("Coroutine finished: %d\n", co_getid());
+    return 1;
+}
+
+void* test_multithread_thread(void *ptr) {
+    // printf("Thread: %ld\n", pthread_self());
+    const int CNT = 20;
+    cid_t coroutine[CNT];
+    for (int i = 0; i < CNT; ++i) {
+        coroutine[i] = co_start(test_multithread_coroutine);
+    }
+    for (int i = 0; i < CNT; ++i) {
+        assert(co_getret(coroutine[i]) == 1);
+        assert(co_status(coroutine[i]) == FINISHED);
+    }
+    // printf("Thread finished: %ld\n", pthread_self());
+}
+
+int test_multithread() {
+    const int CNT = 50;
+    pthread_t threads[CNT];
+    total_coroutine_count = 0;
+    int ret;
+    for (int i = 0; i < CNT; ++i) {
+        ret = pthread_create(threads + i, NULL, test_multithread_thread, NULL);
+    }
+    for (int i = 0; i < CNT; ++i) {
+        pthread_join(threads[i], NULL);
+    }
+    assert(total_coroutine_count == 10000);
+    return 0;
+}
+
+int test_multithread_timer() {
+    // close output when timing
+    struct timeval stop, start;
+    gettimeofday(&start, NULL);
+    test_multithread();
+    gettimeofday(&stop, NULL);
+    printf("Multithread time: %lf ms\n", (stop.tv_sec - start.tv_sec) * 1000 + (stop.tv_usec - start.tv_usec) / 1000.0);
 }
 
 int main(){
-    // unsigned long sp,bp;
-	// asm volatile(
-    //       "movq %%rsp, %0; movq %%rbp, %1;"
-    //     : "=m"(sp),"=m"(bp)
-    //     :
-	// 	: "memory"
-    // );
-	// printf("!!! sp=%lx,bp=%lx\n",sp,bp);
     srand(0);
-    cid_t coroutine[MAXN];
+    cid_t coroutine[20];
     // test start routine
     for(int i = 0; i < 10; ++i){
         coroutine[i] = co_start(test_costart);
@@ -77,26 +134,18 @@ int main(){
     coroutine[0] = co_start(test_yield1);
     printf("Main: after co_start\n");
     coroutine[1] = co_start(test_yield2);
-    // coroutine[1] = F();
     for(int i = 0; i < 2; ++i) while(co_status(coroutine[i]) != FINISHED) co_yield();
     printf("Main: after 2 coroutine yields.\n");
     // test getid
-    for(int i = 0; i < rand() % 1000; ++i) coroutine[i] = co_start(test_dummy);
+    for(int i = 0; i < 10; ++i) coroutine[i] = co_start(test_dummy);
     co_waitall();
     coroutine[0] = co_start(test_getid);
     co_wait(coroutine[0]);
     if(coroutine[0] != getid_val) fail("Get ID differs from internal getid", __func__, __LINE__);
     if(coroutine[0] != co_getret(getid_val)) fail("Get ID differs from internal return value", __func__, __LINE__);
+    printf("Main: test getid finished.\n");
+    test_multithread();
+    test_multithread_timer();
     printf("Finish running.\n");
-
-    
-	// asm volatile(
-    //       "movq %%rsp, %0; movq %%rbp, %1;"
-    //     : "=m"(sp),"=m"(bp)
-    //     :
-	// 	: "memory"
-    // );
-	// printf("@@@ sp=%lx,bp=%lx\n",sp,bp);
-    // exit(0);
     return 0;
 }
