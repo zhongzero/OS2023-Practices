@@ -52,10 +52,10 @@ static void create_pid(){
 	int pid=tot_pthread_size;
 	pthread[pid].pthread_use=1,pthread[pid].pid=pthread_self();
 	tot_pthread_size++;
-	pthread_mutex_unlock(&mutex);
 	pthread[pid].co_arr=malloc(8*CO_SIZE);
 	pthread[pid].current_id=CO_SIZE-1; //main所在的coroutine
 	pthread[pid].co_arr[pthread[pid].current_id]=malloc(sizeof(struct co));
+	pthread_mutex_unlock(&mutex);
 
 	for(int i=0;i<CO_SIZE;i++)pthread[pid].use[i]=0;
 	pthread[pid].use[pthread[pid].current_id]=1;
