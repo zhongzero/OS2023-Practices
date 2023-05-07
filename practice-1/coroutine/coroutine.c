@@ -143,12 +143,8 @@ int co_getid(){
 	return pthread[pid].current_id;
 }
 int co_getret(int cid){
+	co_wait(cid);
 	int pid=getPid();
-	assert(pthread[pid].use[cid]==1);
-	while(pthread[pid].co_arr[cid]->status!=CO_DEAD){
-		pthread[pid].yield_given_id=cid;
-		co_yield();
-	}
 	return pthread[pid].co_retans[cid];
 }
 int co_yield(){
