@@ -66,6 +66,7 @@ static void create_pid(){
 
 __attribute__((constructor)) static void co_initial(){//这里有问题，因为多线程下其他线程初始化时进不来这里，待修改！！
 	// printf("%ld\n",pthread_self());
+	pthread_mutex_init(&mutex,NULL);
 	for(int i=0;i<PTHREAD_SIZE;i++)pthread[i].pthread_use=0,pthread[i].yield_given_id=-1;
 	create_pid();
 }
