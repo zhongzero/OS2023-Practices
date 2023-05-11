@@ -61,11 +61,13 @@
 #define SEGREGATE
 /*下面三选一*/
 // #define FIRST_FIT__AND_INSERT_HEAD
-#define FIRST_FIT__AND_INSERT_TAIL
+// #define FIRST_FIT__AND_INSERT_TAIL
 // #define BEST_FIT
 
+#define MANY_FIRST_FIT__AND_INSERT_TAIL // now only for segregate()
+
 #ifdef SEGREGATE
-#define MAXCHECKLISTNUM 3//设当前寻找的块大小在list(x),则表示最多检查到list(x+MAXCHECKLISTNUM) (开成11表示全部检查)
+#define MAXCHECKLISTNUM 11//设当前寻找的块大小在list(x),则表示最多检查到list(x+MAXCHECKLISTNUM) (开成11表示全部检查)
 #else
 #define MAXCHECKNUM 40//最多往后寻找的块个数
 #endif
@@ -304,6 +306,52 @@ void *malloc(size_t size){
 				return bestP;
 			}
 			id++;
+		}
+	}
+	#endif
+	#ifdef MANY_FIRST_FIT__AND_INSERT_TAIL
+	{
+		int id=GetListId(ALIGN(size));
+		int lid=min(id+MAXCHECKLISTNUM,11);
+		int totfindnum=3;
+		size_t minsize=1e10;
+		void *bestp=NULL;
+		while(id<=lid){
+			// printf("size=%u,id=%d\n",size,id);
+			void *currentp=PRE_LIST_P2(LIST_END2(id));
+			while(currentp!=LIST_BEGIN2(id)){
+				// printf("currentp: %llx\n",currentp);
+				if(GET_SIZE(HEAD(currentp))>=ALIGN(size)){
+					if(GET_SIZE(HEAD(currentp))<minsize){
+						minsize=GET_SIZE(HEAD(currentp));
+						bestp=currentp;
+					}
+					totfindnum--;
+					if(totfindnum==0){
+						// printf("check %llx %llx\n",HEAD(bestp),TAIL(bestp));
+						if(GET_SIZE(HEAD(bestp))>ALIGN(size)+8)bestp=SPLIT(bestp,ALIGN(size));
+						else {
+							PUT(HEAD(bestp),GET_SIZE(HEAD(bestp))|1);
+							PUT(TAIL(bestp),GET_SIZE(TAIL(bestp))|1);
+							DeleteFromExplicitList(bestp);
+						}
+						// printf("!!! malloc %d: %llx\n",size,bestp);
+						return bestp;
+					}
+				}
+				currentp=PRE_LIST_P2(currentp);
+			}
+			id++;
+		}
+		if(bestp!=NULL){
+			if(GET_SIZE(HEAD(bestp))>ALIGN(size)+8)bestp=SPLIT(bestp,ALIGN(size));
+			else {
+				PUT(HEAD(bestp),GET_SIZE(HEAD(bestp))|1);
+				PUT(TAIL(bestp),GET_SIZE(TAIL(bestp))|1);
+				DeleteFromExplicitList(bestp);
+			}
+			// printf("!!! malloc %d: %llx\n",size,bestp);
+			return bestp;
 		}
 	}
 	#endif
