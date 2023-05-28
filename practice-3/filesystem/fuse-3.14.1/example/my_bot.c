@@ -155,7 +155,7 @@ static int Create_File(const char *path, mode_t mode,bool isfolder){ // 创建�
 	newfile->vstat.st_ctime = time(NULL); // 上次文件状态修改时间
 
 
-	folder->vstat.st_nlink++;
+	if(isfolder)folder->vstat.st_nlink++;
 	newfile->father=folder;
 	newfile->next=folder->firstchild;
 	folder->firstchild=newfile;
