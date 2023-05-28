@@ -69,6 +69,10 @@ file mode: 40755
 FindFile, path: /
 find file OK
 my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
 !!! my_access, path: /
 ModeCheck, path: /
 FindFile, path: /
@@ -104,10 +108,6 @@ find file OK
 file mode: 40755
 GetLasName, path: /chatbot
 GetLasName, path: /README.txt
-!!! my_getattr, path: /
-FindFile, path: /
-find file OK
-my_getattr, stbuf->st_mode: 40755
 !!! my_getattr, path: /chatbot
 FindFile, path: /chatbot
 find file OK
@@ -116,104 +116,3 @@ my_getattr, stbuf->st_mode: 40755
 FindFile, path: /README.txt
 find file OK
 my_getattr, stbuf->st_mode: 100644
-!!! my_getattr, path: /d
-FindFile, path: /d
-not find file
-!!! my_mknod, path: /d
-Create_File, path: /d
-FindpreFolder, path: /d
-FindFile, path: /
-find file OK
-ModeCheck, path: /
-FindFile, path: /
-find file OK
-file mode: 40755
-!!! my_getattr, path: /d
-FindFile, path: /d
-find file OK
-my_getattr, stbuf->st_mode: 100644
-!!! my_open, path: /d
-!!! my_utimens, path: /d
-FindFile, path: /d
-find file OK
-!!! my_getattr, path: /d
-FindFile, path: /d
-find file OK
-my_getattr, stbuf->st_mode: 100644
-!!! my_getattr, path: /
-FindFile, path: /
-find file OK
-my_getattr, stbuf->st_mode: 40755
-!!! my_readdir, path: /
-FindFile, path: /
-find file OK
-ModeCheck, path: /
-FindFile, path: /
-find file OK
-file mode: 40755
-GetLasName, path: /d
-GetLasName, path: /chatbot
-GetLasName, path: /README.txt
-!!! my_getattr, path: /
-FindFile, path: /
-find file OK
-my_getattr, stbuf->st_mode: 40755
-!!! my_getattr, path: /chatbot
-FindFile, path: /chatbot
-find file OK
-my_getattr, stbuf->st_mode: 40755
-!!! my_getattr, path: /README.txt
-FindFile, path: /README.txt
-find file OK
-my_getattr, stbuf->st_mode: 100644
-!!! my_getattr, path: /g
-FindFile, path: /g
-not find file
-!!! my_mkdir, path: /g
-Create_File, path: /g
-FindpreFolder, path: /g
-FindFile, path: /
-find file OK
-ModeCheck, path: /
-FindFile, path: /
-find file OK
-file mode: 40755
-!!! my_getattr, path: /g
-FindFile, path: /g
-find file OK
-my_getattr, stbuf->st_mode: 40755
-!!! my_getattr, path: /
-FindFile, path: /
-find file OK
-my_getattr, stbuf->st_mode: 40755
-!!! my_readdir, path: /
-FindFile, path: /
-find file OK
-ModeCheck, path: /
-FindFile, path: /
-find file OK
-file mode: 40755
-GetLasName, path: /g
-GetLasName, path: /d
-GetLasName, path: /chatbot
-GetLasName, path: /README.txt
-!!! my_getattr, path: /
-FindFile, path: /
-find file OK
-my_getattr, stbuf->st_mode: 40755
-!!! my_getattr, path: /d
-FindFile, path: /d
-find file OK
-my_getattr, stbuf->st_mode: 100644
-!!! my_getattr, path: /chatbot
-FindFile, path: /chatbot
-find file OK
-my_getattr, stbuf->st_mode: 40755
-!!! my_getattr, path: /README.txt
-FindFile, path: /README.txt
-find file OK
-my_getattr, stbuf->st_mode: 100644
-!!! my_getattr, path: /
-FindFile, path: /
-find file OK
-my_getattr, stbuf->st_mode: 40755
