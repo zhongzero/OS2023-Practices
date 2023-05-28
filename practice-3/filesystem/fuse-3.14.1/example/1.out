@@ -69,10 +69,6 @@ file mode: 40755
 FindFile, path: /
 find file OK
 my_getattr, stbuf->st_mode: 40755
-!!! my_getattr, path: /
-FindFile, path: /
-find file OK
-my_getattr, stbuf->st_mode: 40755
 !!! my_access, path: /
 ModeCheck, path: /
 FindFile, path: /
@@ -108,11 +104,755 @@ find file OK
 file mode: 40755
 GetLasName, path: /chatbot
 GetLasName, path: /README.txt
-!!! my_getattr, path: /chatbot
-FindFile, path: /chatbot
+!!! my_getattr, path: /
+FindFile, path: /
 find file OK
 my_getattr, stbuf->st_mode: 40755
 !!! my_getattr, path: /README.txt
 FindFile, path: /README.txt
 find file OK
 my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /README.txt
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+!!! my_read, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+mode= 100644
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+read data: This is a virtual file system created by zhongero.
+And now I will tell you how to use the chatbot.
+You will find a folder named chatbot in the root directory.
+Enter it and create two folders.(let they be named bot1 and bot2 for example)
+Then we create one folder bot2 in /bot1 and one folder bot1 in /bot2.
+By writing some files in /bot1/bot2 or /bot2/bot1, we can find the same files in the other folder.
+(Attention: You need to assure that there is a same file in the counter folder before you want to write into a file.)
+By this way, we achieve the function of chatting with each other.
+
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /
+FindFile, path: /
+find file OK
+ModeCheck, path: /
+FindFile, path: /
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot
+GetLasName, path: /README.txt
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /
+FindFile, path: /
+find file OK
+ModeCheck, path: /
+FindFile, path: /
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot
+GetLasName, path: /README.txt
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /README.txt
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+!!! my_write, path: /README.txt
+WriteFile, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+write data: 233
+ is a virtual file system created by zhongero.
+And now I will tell you how to use the chatbot.
+You will find a folder named chatbot in the root directory.
+Enter it and create two folders.(let they be named bot1 and bot2 for example)
+Then we create one folder bot2 in /bot1 and one folder bot1 in /bot2.
+By writing some files in /bot1/bot2 or /bot2/bot1, we can find the same files in the other folder.
+(Attention: You need to assure that there is a same file in the counter folder before you want to write into a fil
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /
+FindFile, path: /
+find file OK
+ModeCheck, path: /
+FindFile, path: /
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot
+GetLasName, path: /README.txt
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /README.txt
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+!!! my_read, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+mode= 100644
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+read data: 233
+
+!!! my_getattr, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /README.txt
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+!!! my_write, path: /README.txt
+WriteFile, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+write data: 2344443
+a virtual file system created by zhongero.
+And now I will tell you how to use the chatbot.
+You will find a folder named chatbot in the root directory.
+Enter it and create two folders.(let they be named bot1 and bot2 for example)
+Then we create one folder bot2 in /bot1 and one folder bot1 in /bot2.
+By writing some files in /bot1/bot2 or /bot2/bot1, we can find the same files in the other folder.
+(Attention: You need to assure that there is a same file in the counter folder before you want to write into a fil
+!!! my_open, path: /README.txt
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+!!! my_getattr, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_read, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+mode= 100644
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+read data: 2344443
+
+!!! my_getattr, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /README.txt
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+!!! my_write, path: /README.txt
+WriteFile, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+write data:  2 
+443
+a virtual file system created by zhongero.
+And now I will tell you how to use the chatbot.
+You will find a folder named chatbot in the root directory.
+Enter it and create two folders.(let they be named bot1 and bot2 for example)
+Then we create one folder bot2 in /bot1 and one folder bot1 in /bot2.
+By writing some files in /bot1/bot2 or /bot2/bot1, we can find the same files in the other folder.
+(Attention: You need to assure that there is a same file in the counter folder before you want to write into a fil
+!!! my_open, path: /README.txt
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+!!! my_getattr, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_read, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+mode= 100644
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+read data:  2 
+443
+
+!!! my_getattr, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /README.txt
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+!!! my_write, path: /README.txt
+WriteFile, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+write data:  2\n 
+3
+a virtual file system created by zhongero.
+And now I will tell you how to use the chatbot.
+You will find a folder named chatbot in the root directory.
+Enter it and create two folders.(let they be named bot1 and bot2 for example)
+Then we create one folder bot2 in /bot1 and one folder bot1 in /bot2.
+By writing some files in /bot1/bot2 or /bot2/bot1, we can find the same files in the other folder.
+(Attention: You need to assure that there is a same file in the counter folder before you want to write into a fil
+!!! my_open, path: /README.txt
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+!!! my_write, path: /README.txt
+WriteFile, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+write data:  2\n 
+3
+a virtual file system created by zhongero.
+And now I will tell you how to use the chatbot.
+You will find a folder named chatbot in the root directory.
+Enter it and create two folders.(let they be named bot1 and bot2 for example)
+Then we create one folder bot2 in /bot1 and one folder bot1 in /bot2.
+By writing some files in /bot1/bot2 or /bot2/bot1, we can find the same files in the other folder.
+(Attention: You need to assure that there is a same file in the counter folder before you want to write into a fil
+!!! my_getattr, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /README.txt
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+!!! my_read, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+mode= 100644
+ModeCheck, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+file mode: 100644
+read data:  2\n 
+
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /
+FindFile, path: /
+find file OK
+ModeCheck, path: /
+FindFile, path: /
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot
+GetLasName, path: /README.txt
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40755
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot2
+GetLasName, path: /chatbot/bot1
+!!! my_getattr, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot2
+GetLasName, path: /chatbot/bot1
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+ModeCheck, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot1/bot2
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot/bot1/bot2
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot1/bot2/a.out
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot1/bot2/a.out
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot1/bot2/a.out
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot1/bot2/a.out
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_readdir, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot1/bot2/a.out
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /chatbot/bot1/bot2/a.out
+ModeCheck, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+file mode: 100644
+!!! my_write, path: /chatbot/bot1/bot2/a.out
+FindCounterPath, path: /chatbot/bot1/bot2/a.out
+!!! path and counter path: /chatbot/bot1/bot2/a.out, /chatbot/bot2/bot1/a.out
+WriteFile, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+ModeCheck, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+file mode: 100644
+write data: 2333
+
+WriteFile, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+ModeCheck, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+file mode: 100644
+write data: 2333
+
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot1/bot2/a.out
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /chatbot/bot1/bot2/a.out
+ModeCheck, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+file mode: 100644
+!!! my_read, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+mode= 100644
+ModeCheck, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+file mode: 100644
+read data: 2333
+
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot2
+GetLasName, path: /chatbot/bot1
+!!! my_getattr, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot2
+GetLasName, path: /chatbot/bot1
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+ModeCheck, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot2/bot1
+!!! my_getattr, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot/bot2/bot1
+ModeCheck, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+file mode: 40755
+!!! my_getattr, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /chatbot/bot2/bot1/a.out
+ModeCheck, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+file mode: 100644
+!!! my_read, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+mode= 100644
+ModeCheck, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+file mode: 100644
+read data: 2333
+
+!!! my_getattr, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /chatbot/bot2/bot1/a.out
+ModeCheck, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+file mode: 100644
+!!! my_write, path: /chatbot/bot2/bot1/a.out
+FindCounterPath, path: /chatbot/bot2/bot1/a.out
+!!! path and counter path: /chatbot/bot2/bot1/a.out, /chatbot/bot1/bot2/a.out
+WriteFile, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+ModeCheck, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+file mode: 100644
+write data: 2
+33
+
+WriteFile, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+ModeCheck, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+file mode: 100644
+write data: 2
+33
+
+!!! my_open, path: /chatbot/bot2/bot1/a.out
+ModeCheck, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+file mode: 100644
+!!! my_getattr, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_read, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+mode= 100644
+ModeCheck, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+file mode: 100644
+read data: 2
+33
+
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot/bot1/bot2
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+!!! my_getattr, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /chatbot/bot1/bot2/a.out
+ModeCheck, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+file mode: 100644
+!!! my_read, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+mode= 100644
+ModeCheck, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+file mode: 100644
+read data: 2
+33
+
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /
+ModeCheck, path: /
+FindFile, path: /
+find file OK
+file mode: 40755

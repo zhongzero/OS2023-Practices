@@ -190,11 +190,14 @@ static int WriteFile(const char *path,const char *buf, size_t size, off_t offset
 	if(!ModeCheck(path,1))return -EACCES; // 检查是否有写入权限
 	size_t reqsize=offset+size;
 	blkcnt_t reqblock=(reqsize+BLOCKSIZE-1)/BLOCKSIZE;
-	if( reqblock > file->vstat.st_blocks ){ // 如果写入的数据超过了文件大小,则需要重新分配空间
-		file->data=(char*)realloc(file->data,reqblock*BLOCKSIZE);
-		file->vstat.st_blocks=reqblock;
-	}
-	if(reqsize>file->vstat.st_size)file->vstat.st_size=reqsize;
+	// if( reqblock > file->vstat.st_blocks ){ // 如果写入的数据超过了文件大小,则需要重新分配空间
+	// 	file->data=(char*)realloc(file->data,reqblock*BLOCKSIZE);
+	// 	file->vstat.st_blocks=reqblock;
+	// }
+	// if(reqsize>file->vstat.st_size)file->vstat.st_size=reqsize;
+	file->data=(char*)realloc(file->data,reqblock*BLOCKSIZE);
+	file->vstat.st_blocks=reqblock;
+	file->vstat.st_size=reqsize;
 	memcpy(file->data+offset,buf,size); // 将buf中的数据写入文件
 	fprintf(fp,"write data: %s\n",file->data+offset);
 	file->vstat.st_atime = time(NULL);	// 修改上次访问时间
