@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 
+	//这里使用MAP_SHARED，会将映射区所做的操作反映到物理设备（磁盘）上，即实现了共享映射空间
 	mmaped = (char *)mmap(NULL, sb.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	if (mmaped == (char *)-1) {
 		fprintf(stderr, "fail on mmap %s\n", argv[1]);

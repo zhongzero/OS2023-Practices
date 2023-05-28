@@ -1,0 +1,22 @@
+{
+	"files.associations": {
+		"stdlib.h": "c",
+		"stat.h": "c",
+		"mman.h": "c",
+		"system_error": "c",
+		"fuse.h": "c",
+		"stdio.h": "c",
+		"string.h": "c",
+		"endian.h": "c",
+		"array": "c",
+		"string": "c",
+		"string_view": "c",
+		"stdbool.h": "c",
+		"*.tcc": "c",
+		"fstream": "c",
+		"iomanip": "c",
+		"istream": "c",
+		"ostream": "c",
+		"regex": "c"
+	}
+}

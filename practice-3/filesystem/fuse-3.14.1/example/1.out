@@ -1,0 +1,1124 @@
+!!! my_init
+Create_File, path: /README.txt
+FindpreFolder, path: /README.txt
+FindFile, path: /
+find file OK
+ModeCheck, path: /
+FindFile, path: /
+find file OK
+file mode: 40755
+FindFile, path: /README.txt
+find file OK
+Create_File, path: /chatbot
+FindpreFolder, path: /chatbot
+FindFile, path: /
+find file OK
+ModeCheck, path: /
+FindFile, path: /
+find file OK
+file mode: 40755
+Create_File, path: /chatbot/bot1
+FindpreFolder, path: /chatbot/bot1
+FindFile, path: /chatbot/
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40755
+Create_File, path: /chatbot/bot2
+FindpreFolder, path: /chatbot/bot2
+FindFile, path: /chatbot/
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40755
+Create_File, path: /chatbot/bot1/bot2
+FindpreFolder, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/
+find file OK
+ModeCheck, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+file mode: 40755
+Create_File, path: /chatbot/bot2/bot1
+FindpreFolder, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/
+find file OK
+ModeCheck, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+file mode: 40755
+Create_File, path: /chatbot/bot1/bot2/a.out
+FindpreFolder, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/
+find file OK
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+Create_File, path: /chatbot/bot2/bot1/a.out
+FindpreFolder, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/
+find file OK
+ModeCheck, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+file mode: 40755
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /
+ModeCheck, path: /
+FindFile, path: /
+find file OK
+file mode: 40755
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /
+FindFile, path: /
+find file OK
+ModeCheck, path: /
+FindFile, path: /
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot
+GetLasName, path: /README.txt
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /README.txt
+FindFile, path: /README.txt
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /
+FindFile, path: /
+find file OK
+ModeCheck, path: /
+FindFile, path: /
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot
+GetLasName, path: /README.txt
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_chmod, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40000
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /
+FindFile, path: /
+find file OK
+ModeCheck, path: /
+FindFile, path: /
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot
+GetLasName, path: /README.txt
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40000
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40000
+!!! my_access, path: /chatbot
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40000
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40000
+!!! my_chmod, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40100
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40100
+!!! my_access, path: /chatbot
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40100
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40100
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40100
+!!! my_getattr, path: /chatbot/chatbot
+FindFile, path: /chatbot/chatbot
+not find file
+!!! my_getattr, path: /chatbot/chatbot
+FindFile, path: /chatbot/chatbot
+not find file
+!!! my_getattr, path: /chatbot/chatbot
+FindFile, path: /chatbot/chatbot
+not find file
+!!! my_getattr, path: /chatbot/chatbot
+FindFile, path: /chatbot/chatbot
+not find file
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40100
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40100
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40100
+!!! my_chmod, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40400
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40400
+GetLasName, path: /chatbot/bot2
+GetLasName, path: /chatbot/bot1
+!!! my_getattr, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+not find file
+!!! my_mknod, path: /chatbot/a
+Create_File, path: /chatbot/a
+FindpreFolder, path: /chatbot/a
+FindFile, path: /chatbot/
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40400
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+not find file
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+not find file
+!!! my_mkdir, path: /chatbot/a
+Create_File, path: /chatbot/a
+FindpreFolder, path: /chatbot/a
+FindFile, path: /chatbot/
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40400
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+ModeCheck, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot1/bot2
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot/bot1
+ModeCheck, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+file mode: 40755
+!!! my_readdir, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+ModeCheck, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot1/bot2
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot1/bot2/a.out
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot/bot1/bot2
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+!!! my_readdir, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot1/bot2/a.out
+!!! my_getattr, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_access, path: /chatbot/bot1/bot2/a.out
+ModeCheck, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+file mode: 100644
+!!! my_getattr, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_unlink, path: /chatbot/bot1/bot2/a.out
+Remove_File, path: /chatbot/bot1/bot2/a.out
+FindFile, path: /chatbot/bot1/bot2/a.out
+find file OK
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+!!! my_getattr, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot/bot1/bot2
+ModeCheck, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+file mode: 40755
+!!! my_rmdir, path: /chatbot/bot1/bot2
+Remove_File, path: /chatbot/bot1/bot2
+FindFile, path: /chatbot/bot1/bot2
+find file OK
+ModeCheck, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+file mode: 40755
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot/bot1
+ModeCheck, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+file mode: 40755
+!!! my_rmdir, path: /chatbot/bot1
+Remove_File, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40400
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40400
+!!! my_chmod, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40200
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+ModeCheck, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+file mode: 40755
+!!! my_getattr, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot/bot1
+ModeCheck, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+file mode: 40755
+!!! my_rmdir, path: /chatbot/bot1
+Remove_File, path: /chatbot/bot1
+FindFile, path: /chatbot/bot1
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40200
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40200
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40200
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40200
+!!! my_chmod, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40600
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40600
+GetLasName, path: /chatbot/bot2
+!!! my_getattr, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+ModeCheck, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot2/bot1
+!!! my_getattr, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot/bot2
+ModeCheck, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+file mode: 40755
+!!! my_readdir, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+ModeCheck, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot2/bot1
+!!! my_getattr, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_readdir, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+ModeCheck, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot2/bot1/a.out
+!!! my_getattr, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot/bot2/bot1
+ModeCheck, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+file mode: 40755
+!!! my_readdir, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+ModeCheck, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+file mode: 40755
+GetLasName, path: /chatbot/bot2/bot1/a.out
+!!! my_getattr, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_access, path: /chatbot/bot2/bot1/a.out
+ModeCheck, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+file mode: 100644
+!!! my_getattr, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_unlink, path: /chatbot/bot2/bot1/a.out
+Remove_File, path: /chatbot/bot2/bot1/a.out
+FindFile, path: /chatbot/bot2/bot1/a.out
+find file OK
+ModeCheck, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+file mode: 40755
+!!! my_getattr, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot/bot2/bot1
+ModeCheck, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+file mode: 40755
+!!! my_rmdir, path: /chatbot/bot2/bot1
+Remove_File, path: /chatbot/bot2/bot1
+FindFile, path: /chatbot/bot2/bot1
+find file OK
+ModeCheck, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+file mode: 40755
+!!! my_getattr, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_access, path: /chatbot/bot2
+ModeCheck, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+file mode: 40755
+!!! my_rmdir, path: /chatbot/bot2
+Remove_File, path: /chatbot/bot2
+FindFile, path: /chatbot/bot2
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40600
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40600
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40600
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+not find file
+!!! my_mknod, path: /chatbot/a
+Create_File, path: /chatbot/a
+FindpreFolder, path: /chatbot/a
+FindFile, path: /chatbot/
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40600
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /chatbot/a
+!!! my_utimens, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40600
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40600
+GetLasName, path: /chatbot/a
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40600
+!!! my_chmod, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40200
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40200
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40200
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+not find file
+!!! my_mknod, path: /chatbot/b
+Create_File, path: /chatbot/b
+FindpreFolder, path: /chatbot/b
+FindFile, path: /chatbot/
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40200
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /chatbot/b
+!!! my_utimens, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40200
+!!! my_chmod, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40400
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40400
+GetLasName, path: /chatbot/b
+GetLasName, path: /chatbot/a
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40400
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40400
+GetLasName, path: /chatbot/b
+GetLasName, path: /chatbot/a
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /chatbot/a
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100644
+!!! my_read, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+mode= 100644
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100644
+read data: 
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /chatbot/b
+ModeCheck, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+file mode: 100644
+!!! my_read, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+mode= 100644
+ModeCheck, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+file mode: 100644
+read data: 
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_access, path: /chatbot/a
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100644
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_access, path: /chatbot/a
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100644
+!!! my_unlink, path: /chatbot/a
+Remove_File, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40400
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_access, path: /chatbot/b
+ModeCheck, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+file mode: 100644
+!!! my_unlink, path: /chatbot/b
+Remove_File, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40400
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_chmod, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100777
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100777
+!!! my_access, path: /chatbot/a
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100777
+!!! my_unlink, path: /chatbot/a
+Remove_File, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40400
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40400
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40400
+GetLasName, path: /chatbot/b
+GetLasName, path: /chatbot/a
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100777
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40400
+!!! my_chmod, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40777
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40777
+GetLasName, path: /chatbot/b
+GetLasName, path: /chatbot/a
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100777
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40777
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100777
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40777
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100777
+!!! my_open, path: /chatbot/a
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100777
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /chatbot/b
+ModeCheck, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+file mode: 100644
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100777
+!!! my_open, path: /chatbot/a
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100777
+!!! my_write, path: /chatbot/a
+FindCounterPath, path: /chatbot/a
+!!! path and counter path: /chatbot/a, /chatbot/a
+WriteFile, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100777
+write data: 2
+
+WriteFile, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100777
+write data: 2
+
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /chatbot/b
+ModeCheck, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+file mode: 100644
+!!! my_write, path: /chatbot/b
+FindCounterPath, path: /chatbot/b
+!!! path and counter path: /chatbot/b, /chatbot/b
+WriteFile, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+ModeCheck, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+file mode: 100644
+write data: 2
+
+WriteFile, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+ModeCheck, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+file mode: 100644
+write data: 2
+
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40777
+!!! my_readdir, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+ModeCheck, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+file mode: 40777
+GetLasName, path: /chatbot/b
+GetLasName, path: /chatbot/a
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100777
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100777
+!!! my_chmod, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100400
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100400
+!!! my_open, path: /chatbot/a
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100400
+!!! my_getattr, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+my_getattr, stbuf->st_mode: 100644
+!!! my_open, path: /chatbot/b
+ModeCheck, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+file mode: 100644
+!!! my_write, path: /chatbot/b
+FindCounterPath, path: /chatbot/b
+!!! path and counter path: /chatbot/b, /chatbot/b
+WriteFile, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+ModeCheck, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+file mode: 100644
+write data: 2
+
+WriteFile, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+ModeCheck, path: /chatbot/b
+FindFile, path: /chatbot/b
+find file OK
+file mode: 100644
+write data: 2
+
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100400
+!!! my_chmod, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100200
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100200
+!!! my_open, path: /chatbot/a
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100200
+!!! my_write, path: /chatbot/a
+FindCounterPath, path: /chatbot/a
+!!! path and counter path: /chatbot/a, /chatbot/a
+WriteFile, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100200
+write data: 2
+
+WriteFile, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100200
+write data: 2
+
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100200
+!!! my_open, path: /chatbot/a
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100200
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100200
+!!! my_chmod, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+!!! my_getattr, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+my_getattr, stbuf->st_mode: 100500
+!!! my_open, path: /chatbot/a
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100500
+!!! my_read, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+mode= 100500
+ModeCheck, path: /chatbot/a
+FindFile, path: /chatbot/a
+find file OK
+file mode: 100500
+read data: 2
+
+!!! my_getattr, path: /
+FindFile, path: /
+find file OK
+my_getattr, stbuf->st_mode: 40755
+!!! my_getattr, path: /chatbot
+FindFile, path: /chatbot
+find file OK
+my_getattr, stbuf->st_mode: 40777
+!!! my_access, path: /
+ModeCheck, path: /
+FindFile, path: /
+find file OK
+file mode: 40755
